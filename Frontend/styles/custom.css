@@ -1,0 +1,59 @@
+/* custom animations, utilities, and minor overrides for ShieldStream */
+
+/* Encryption pulse for lock/play glyphs or badges */
+@keyframes encryptPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.5);
+  }
+  70% {
+    transform: scale(1.03);
+    box-shadow: 0 0 0 12px rgba(37, 99, 235, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+  }
+}
+
+.pulse-encrypt {
+  animation: encryptPulse 2.4s ease-out infinite;
+}
+
+/* Countdown urgency blink for last 10 seconds */
+@keyframes tickerUrgent {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.timer-urgent {
+  animation: tickerUrgent .9s ease-in-out infinite;
+}
+
+/* Toast styles (used across pages) */
+.toast {
+  @apply fixed bottom-6 right-6 z-50 bg-white text-gray-800 border border-gray-200 shadow-lg px-4 py-3 rounded-lg hidden;
+}
+.toast.show {
+  display: block;
+}
+
+/* Utility: smooth fade-in for sections */
+.fade-in {
+  animation: fadeIn .5s ease-out both;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
