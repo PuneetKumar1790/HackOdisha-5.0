@@ -73,10 +73,12 @@ router.post("/login", async (req, res) => {
 
     //Send refresh token in cookies
     const isProduction = process.env.NODE_ENV === "production";
+    const isCrossOrigin = req.headers.origin && req.headers.origin !== `${req.protocol}://${req.get('host')}`;
+    
     const cookieOptions = {
       httpOnly: true,
-      secure: isProduction, // true in production (HTTPS), false in development
-      sameSite: isProduction ? "None" : "Lax", // None for cross-origin in production
+      secure: isProduction || isCrossOrigin, // true in production or cross-origin (HTTPS), false in development
+      sameSite: (isProduction || isCrossOrigin) ? "None" : "Lax", // None for cross-origin, Lax for same-origin
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     };
 
@@ -108,10 +110,12 @@ router.post("/logout", async (req, res) => {
     await user.save();
 
     const isProduction = process.env.NODE_ENV === "production";
+    const isCrossOrigin = req.headers.origin && req.headers.origin !== `${req.protocol}://${req.get('host')}`;
+    
     const clearCookieOptions = {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "None" : "Lax",
+      secure: isProduction || isCrossOrigin,
+      sameSite: (isProduction || isCrossOrigin) ? "None" : "Lax",
     };
 
     res.clearCookie("refreshToken", clearCookieOptions);
