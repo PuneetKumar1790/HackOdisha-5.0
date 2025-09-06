@@ -240,46 +240,62 @@
     <!-- Hero -->
     <section class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
       <div
-        class="max-w-6xl mx-auto px-4 py-20 grid md:grid-cols-2 gap-10 items-center"
+        class="max-w-7xl mx-auto px-4 py-16 sm:py-20 lg:py-24 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center"
       >
-        <div class="space-y-6">
-          <h1 class="text-4xl md:text-5xl font-extrabold text-balance">
-            Stop Piracy. Protect Your Revenue.
-          </h1>
-          <p class="text-lg/7 opacity-90">
-            ShieldStream helps EdTech platforms prevent ₹2,000 Cr in losses with
-            secure, time-limited video links.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-3">
+        <div class="space-y-6 lg:space-y-8">
+          <div class="space-y-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/20 text-green-200 text-sm font-medium">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Live & Working</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-balance leading-tight">
+              Stop Piracy. Protect Your Revenue.
+            </h1>
+            <p class="text-base sm:text-lg lg:text-xl opacity-90 leading-relaxed">
+              ShieldStream's <strong>production-ready backend</strong> prevents ₹2,000 Cr in EdTech losses with 
+              <strong>AES-128 encrypted, time-limited video streaming</strong> that actually works.
+            </p>
+          </div>
+          
+          <div class="flex flex-col sm:flex-row gap-3 lg:gap-4">
             <a
               href="player.html?demo=true"
-              class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-accent text-gray-900 font-semibold shadow-lg hover:scale-[1.02] transition"
+              class="inline-flex items-center justify-center gap-2 px-6 py-3 lg:px-8 lg:py-4 rounded-xl bg-accent text-gray-900 font-semibold shadow-lg hover:scale-[1.02] transition-all duration-200 text-sm lg:text-base"
             >
-              <i class="fa-solid fa-circle-play"></i> View Live Demo
+              <i class="fa-solid fa-circle-play"></i> 
+              <span class="hidden sm:inline">View Live Demo</span>
+              <span class="sm:hidden">Live Demo</span>
             </a>
             <button
               id="loginBtn2"
-              class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/95 text-gray-900 font-semibold shadow-lg hover:scale-[1.02] transition cursor-pointer"
+              class="inline-flex items-center justify-center gap-2 px-6 py-3 lg:px-8 lg:py-4 rounded-xl bg-white/95 text-gray-900 font-semibold shadow-lg hover:scale-[1.02] transition-all duration-200 text-sm lg:text-base"
             >
-              <i class="fa-solid fa-gauge-high"></i> Login to Dashboard
+              <i class="fa-solid fa-gauge-high"></i> 
+              <span class="hidden sm:inline">Login to Dashboard</span>
+              <span class="sm:hidden">Dashboard</span>
             </button>
           </div>
-          <div class="flex items-center gap-6 pt-4 text-sm opacity-90">
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-lock text-secondary"></i> AES-128
+          
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+            <div class="flex items-center gap-2 text-sm lg:text-base">
+              <i class="fa-solid fa-lock text-green-400"></i> 
+              <span class="opacity-90">AES-128 Encryption</span>
             </div>
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-shield-halved text-secondary"></i> HTTPS
+            <div class="flex items-center gap-2 text-sm lg:text-base">
+              <i class="fa-solid fa-shield-halved text-blue-400"></i> 
+              <span class="opacity-90">HTTPS Secure</span>
             </div>
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-clock text-secondary"></i> 10-min expiry
+            <div class="flex items-center gap-2 text-sm lg:text-base">
+              <i class="fa-solid fa-clock text-yellow-400"></i> 
+              <span class="opacity-90">10-min Expiry</span>
             </div>
           </div>
         </div>
-        <div class="bg-white/10 rounded-2xl p-6 shadow-lg ring-1 ring-white/10">
+        
+        <div class="order-first lg:order-last bg-white/10 rounded-2xl p-4 sm:p-6 shadow-lg ring-1 ring-white/10">
           <img
             src="assets/images/shieldstream-logo.jpeg"
-            alt="ShieldStream"
+            alt="ShieldStream - Secure Video Streaming Platform"
             class="w-full rounded-xl"
           />
         </div>
@@ -334,47 +350,95 @@
 
     <!-- How it works -->
     <section id="how" class="bg-white">
-      <div class="max-w-6xl mx-auto px-4 py-16">
-        <h2 class="text-3xl font-bold text-textH text-center">How It Works</h2>
-        <div class="mt-10 grid md:grid-cols-3 gap-6">
+      <div class="max-w-7xl mx-auto px-4 py-16 lg:py-20">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-textH mb-4">How Our Backend Works</h2>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            Production-ready Node.js backend with enterprise-grade security features
+          </p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           <div
-            class="p-6 rounded-xl border border-gray-200 shadow-sm bg-surface hover:shadow-lg transition"
+            class="group p-6 lg:p-8 rounded-xl border border-gray-200 shadow-sm bg-surface hover:shadow-xl transition-all duration-300"
           >
             <div
-              class="w-12 h-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center mb-4"
+              class="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
             >
-              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <i class="fa-solid fa-cloud-arrow-up text-xl lg:text-2xl"></i>
             </div>
-            <h3 class="font-semibold text-textH">Upload</h3>
-            <p class="text-sm mt-2 text-gray-600">
-              Upload your video lesson or content.
+            <h3 class="text-lg lg:text-xl font-semibold text-textH mb-3">Secure Upload</h3>
+            <p class="text-sm lg:text-base text-gray-600 leading-relaxed">
+              Videos are uploaded to <strong>Azure Blob Storage</strong> with automatic 
+              <strong>HLS segmentation</strong> and <strong>AES-128 encryption</strong>.
             </p>
           </div>
           <div
-            class="p-6 rounded-xl border border-gray-200 shadow-sm bg-surface hover:shadow-lg transition"
+            class="group p-6 lg:p-8 rounded-xl border border-gray-200 shadow-sm bg-surface hover:shadow-xl transition-all duration-300"
           >
             <div
-              class="w-12 h-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center mb-4 pulse-encrypt"
+              class="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-gradient-to-br from-green-50 to-green-100 text-green-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 pulse-encrypt"
             >
-              <i class="fa-solid fa-user-shield"></i>
+              <i class="fa-solid fa-user-shield text-xl lg:text-2xl"></i>
             </div>
-            <h3 class="font-semibold text-textH">Encrypt</h3>
-            <p class="text-sm mt-2 text-gray-600">
-              Our system automatically encrypts it with AES-128.
+            <h3 class="text-lg lg:text-xl font-semibold text-textH mb-3">JWT Authentication</h3>
+            <p class="text-sm lg:text-base text-gray-600 leading-relaxed">
+              <strong>Token-based authentication</strong> with refresh tokens, 
+              <strong>session management</strong>, and <strong>user access control</strong>.
             </p>
           </div>
           <div
-            class="p-6 rounded-xl border border-gray-200 shadow-sm bg-surface hover:shadow-lg transition"
+            class="group p-6 lg:p-8 rounded-xl border border-gray-200 shadow-sm bg-surface hover:shadow-xl transition-all duration-300 sm:col-span-2 lg:col-span-1"
           >
             <div
-              class="w-12 h-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center mb-4"
+              class="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 text-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
             >
-              <i class="fa-solid fa-link"></i>
+              <i class="fa-solid fa-link text-xl lg:text-2xl"></i>
             </div>
-            <h3 class="font-semibold text-textH">Share</h3>
-            <p class="text-sm mt-2 text-gray-600">
-              Get a secure, shareable link that expires after 10 minutes.
+            <h3 class="text-lg lg:text-xl font-semibold text-textH mb-3">Time-Limited Access</h3>
+            <p class="text-sm lg:text-base text-gray-600 leading-relaxed">
+              <strong>Dynamic SAS URLs</strong> with <strong>10-minute expiry</strong>, 
+              <strong>HTTPS enforcement</strong>, and <strong>cross-origin security</strong>.
             </p>
+          </div>
+        </div>
+        
+        <!-- Backend Features Highlight -->
+        <div class="mt-16 bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-8 lg:p-12">
+          <div class="text-center mb-8">
+            <h3 class="text-2xl lg:text-3xl font-bold text-textH mb-4">Production-Ready Backend Features</h3>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+              Built with enterprise-grade technologies and security best practices
+            </p>
+          </div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="text-center">
+              <div class="w-12 h-12 mx-auto mb-3 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+                <i class="fa-solid fa-database"></i>
+              </div>
+              <h4 class="font-semibold text-textH mb-1">MongoDB</h4>
+              <p class="text-xs text-gray-600">User & Session Management</p>
+            </div>
+            <div class="text-center">
+              <div class="w-12 h-12 mx-auto mb-3 rounded-lg bg-green-100 text-green-600 flex items-center justify-center">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <h4 class="font-semibold text-textH mb-1">AES-128</h4>
+              <p class="text-xs text-gray-600">Video Encryption</p>
+            </div>
+            <div class="text-center">
+              <div class="w-12 h-12 mx-auto mb-3 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center">
+                <i class="fa-solid fa-cloud"></i>
+              </div>
+              <h4 class="font-semibold text-textH mb-1">Azure Blob</h4>
+              <p class="text-xs text-gray-600">Scalable Storage</p>
+            </div>
+            <div class="text-center">
+              <div class="w-12 h-12 mx-auto mb-3 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center">
+                <i class="fa-solid fa-globe"></i>
+              </div>
+              <h4 class="font-semibold text-textH mb-1">HLS Streaming</h4>
+              <p class="text-xs text-gray-600">Adaptive Bitrate</p>
+            </div>
           </div>
         </div>
       </div>

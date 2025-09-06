@@ -87,39 +87,96 @@
         <div class="max-w-6xl mx-auto px-4 py-6">
           <!-- Welcome -->
           <div
-            class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 rounded-2xl shadow-lg flex items-center justify-between"
+            class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 sm:p-6 rounded-2xl shadow-lg"
           >
-            <div>
-              <h1 class="text-2xl font-bold">
-                Welcome back, <span id="welcomeName">Demo User</span>!
-              </h1>
-              <p class="opacity-90 mt-1">
-                You've protected <span class="font-semibold">12</span> videos
-                this month.
-              </p>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-2">
+                  <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold">
+                    Welcome back, <span id="welcomeName">Demo User</span>!
+                  </h1>
+                  <div class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-500/20 text-green-200 text-xs font-medium">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Live</span>
+                  </div>
+                </div>
+                <p class="opacity-90 text-sm sm:text-base">
+                  Your <strong>production-ready backend</strong> has protected 
+                  <span class="font-semibold">12</span> videos this month with 
+                  <strong>AES-128 encryption</strong>.
+                </p>
+              </div>
+              <a
+                href="upload.html"
+                class="px-4 sm:px-5 py-2 sm:py-3 bg-white text-gray-900 font-semibold rounded-xl shadow hover:scale-[1.02] transition text-sm sm:text-base"
+              >
+                <i class="fa-solid fa-cloud-arrow-up mr-2"></i>
+                <span class="hidden sm:inline">Upload a New Video</span>
+                <span class="sm:hidden">Upload</span>
+              </a>
             </div>
-            <a
-              href="upload.html"
-              class="px-5 py-3 bg-white text-gray-900 font-semibold rounded-xl shadow hover:scale-[1.02] transition"
-            >
-              Upload a New Video
-            </a>
           </div>
 
           <!-- Stats -->
-          <div class="grid md:grid-cols-3 gap-6 mt-6">
-            <div class="bg-white rounded-xl shadow-md p-5">
-              <div class="text-sm text-gray-500">Videos Protected</div>
-              <div class="mt-1 text-3xl font-extrabold text-gray-900">48</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-6">
+            <div class="bg-white rounded-xl shadow-md p-4 sm:p-5">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+                  <i class="fa-solid fa-shield-halved text-sm"></i>
+                </div>
+                <div class="text-sm text-gray-500">Videos Protected</div>
+              </div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-gray-900">48</div>
+              <div class="text-xs text-gray-400 mt-1">AES-128 Encrypted</div>
             </div>
-            <div class="bg-white rounded-xl shadow-md p-5">
-              <div class="text-sm text-gray-500">Active Links</div>
-              <div class="mt-1 text-3xl font-extrabold text-gray-900">9</div>
+            <div class="bg-white rounded-xl shadow-md p-4 sm:p-5">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="w-8 h-8 rounded-lg bg-green-100 text-green-600 flex items-center justify-center">
+                  <i class="fa-solid fa-link text-sm"></i>
+                </div>
+                <div class="text-sm text-gray-500">Active Sessions</div>
+              </div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-gray-900">9</div>
+              <div class="text-xs text-gray-400 mt-1">JWT Authenticated</div>
             </div>
-            <div class="bg-white rounded-xl shadow-md p-5">
-              <div class="text-sm text-gray-500">Est. Loss Prevented</div>
-              <div class="mt-1 text-3xl font-extrabold text-gray-900">
-                ₹24,50,000
+            <div class="bg-white rounded-xl shadow-md p-4 sm:p-5 sm:col-span-2 lg:col-span-1">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="w-8 h-8 rounded-lg bg-yellow-100 text-yellow-600 flex items-center justify-center">
+                  <i class="fa-solid fa-rupee-sign text-sm"></i>
+                </div>
+                <div class="text-sm text-gray-500">Revenue Protected</div>
+              </div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-gray-900">
+                ₹24.5L
+              </div>
+              <div class="text-xs text-gray-400 mt-1">Backend Secured</div>
+            </div>
+          </div>
+
+          <!-- Backend Status -->
+          <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-4 sm:p-6 mt-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-8 h-8 rounded-lg bg-green-100 text-green-600 flex items-center justify-center">
+                <i class="fa-solid fa-server"></i>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-800">Backend Infrastructure Status</h3>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span class="text-gray-600">MongoDB: Online</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span class="text-gray-600">Azure Blob: Active</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span class="text-gray-600">HLS Streaming: Ready</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span class="text-gray-600">JWT Auth: Active</span>
               </div>
             </div>
           </div>

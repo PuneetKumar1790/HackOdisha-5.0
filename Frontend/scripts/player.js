@@ -7,15 +7,54 @@ class SecurePlayer {
     const videoId = urlParams.get("id") || "social";
     const isDemo = urlParams.get("demo") === "true";
 
+    // Show loading state
+    this.showLoading();
+
     // Start countdown timer
     this.startCountdown();
 
     // Initialize video player
-    if (isDemo) {
-      // For demo, show a placeholder
-      this.initDemoPlayer();
-    } else {
-      await this.initVideoPlayer(videoId);
+    try {
+      if (isDemo) {
+        // For demo, show a placeholder
+        this.initDemoPlayer();
+      } else {
+        await this.initVideoPlayer(videoId);
+      }
+    } catch (error) {
+      console.error("Player initialization error:", error);
+      this.showError("Failed to initialize video player. Please try again.");
+    }
+  }
+
+  static showLoading() {
+    const loadingOverlay = document.getElementById("loading-overlay");
+    if (loadingOverlay) {
+      loadingOverlay.classList.remove("hidden");
+    }
+  }
+
+  static hideLoading() {
+    const loadingOverlay = document.getElementById("loading-overlay");
+    if (loadingOverlay) {
+      loadingOverlay.classList.add("hidden");
+    }
+  }
+
+  static showError(message) {
+    this.hideLoading();
+    const errorOverlay = document.getElementById("error-overlay");
+    const errorMessage = document.getElementById("error-message");
+    if (errorOverlay && errorMessage) {
+      errorMessage.textContent = message;
+      errorOverlay.classList.remove("hidden");
+    }
+  }
+
+  static hideError() {
+    const errorOverlay = document.getElementById("error-overlay");
+    if (errorOverlay) {
+      errorOverlay.classList.add("hidden");
     }
   }
 
@@ -59,11 +98,17 @@ class SecurePlayer {
   }
 
   static initDemoPlayer() {
+    this.hideLoading();
     const video = document.getElementById("video");
     video.src =
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
     video.poster =
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg";
+    
+    // Add error handling for demo video
+    video.addEventListener('error', () => {
+      this.showError("Failed to load demo video. Please check your internet connection.");
+    });
   }
 
   static async initVideoPlayer(videoId) {
@@ -71,7 +116,11 @@ class SecurePlayer {
       console.log(`Loading stream for video ID: ${videoId}`);
 
       // Try to refresh token first to ensure we have valid cookies
-      await Auth.refreshToken();
+      const tokenRefreshed = await Auth.refreshToken();
+      if (!tokenRefreshed) {
+        this.showError("Authentication failed. Please login again.");
+        return;
+      }
 
       const response = await fetch(`${BASE_URL}/api/stream/${videoId}`, {
         method: "GET",
@@ -87,16 +136,18 @@ class SecurePlayer {
       if (response.status === 401) {
         // Token expired or invalid, redirect to login
         console.log("Authentication failed, redirecting to login");
-        window.location.href = "index.html#login-required";
+        this.showError("Session expired. Redirecting to login...");
+        setTimeout(() => {
+          window.location.href = "index.html#login-required";
+        }, 2000);
         return;
       }
 
       if (!response.ok) {
         const errorData = await response.text();
         console.error("Stream response error:", errorData);
-        throw new Error(
-          `Failed to load stream: ${response.status} - ${errorData}`
-        );
+        this.showError(`Failed to load stream (${response.status}). Please try again.`);
+        return;
       }
 
       const m3u8Content = await response.text();
@@ -118,7 +169,7 @@ class SecurePlayer {
       if (Hls.isSupported()) {
         console.log("Using HLS.js for playback");
         const hls = new Hls({
-          debug: true,
+          debug: false, // Disable debug in production
           xhrSetup: function (xhr, url) {
             // Include credentials for all backend requests
             xhr.withCredentials = true;
@@ -134,24 +185,29 @@ class SecurePlayer {
         hls.loadSource(playlistUrl);
         hls.attachMedia(video);
 
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
           console.log("Manifest parsed, ready to play");
+          this.hideLoading();
+          this.hideError();
         });
 
-        hls.on(Hls.Events.ERROR, function (event, data) {
+        hls.on(Hls.Events.ERROR, (event, data) => {
           console.error("HLS Error:", event, data);
           if (data.fatal) {
             switch (data.type) {
               case Hls.ErrorTypes.NETWORK_ERROR:
                 console.log("Network error, trying to recover...");
+                this.showError("Network error. Attempting to recover...");
                 hls.startLoad();
                 break;
               case Hls.ErrorTypes.MEDIA_ERROR:
                 console.log("Media error, trying to recover...");
+                this.showError("Media error. Attempting to recover...");
                 hls.recoverMediaError();
                 break;
               default:
                 console.log("Fatal error, destroying HLS instance");
+                this.showError("Fatal playback error. Please try again.");
                 hls.destroy();
                 break;
             }
@@ -163,26 +219,15 @@ class SecurePlayer {
           type: "application/vnd.apple.mpegurl",
         });
         video.src = URL.createObjectURL(blob);
+        this.hideLoading();
+        this.hideError();
       } else {
-        throw new Error("HLS is not supported in this browser");
+        this.showError("HLS is not supported in this browser. Please use a modern browser.");
+        return;
       }
     } catch (error) {
       console.error("Error initializing video player:", error);
-
-      // Show user-friendly error
-      const errorDiv = document.createElement("div");
-      errorDiv.className = "text-center p-8 text-red-600";
-      errorDiv.innerHTML = `
-        <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
-        <h3 class="text-lg font-semibold mb-2">Unable to Load Video</h3>
-        <p class="text-sm">${error.message}</p>
-        <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-          Try Again
-        </button>
-      `;
-
-      const video = document.getElementById("video");
-      video.parentNode.replaceChild(errorDiv, video);
+      this.showError(`Failed to initialize video player: ${error.message}`);
     }
   }
 }
@@ -190,6 +235,12 @@ class SecurePlayer {
 // Initialize player when page loads
 document.addEventListener("DOMContentLoaded", () => {
   SecurePlayer.init();
+
+  // Add retry functionality
+  document.getElementById("retry-btn")?.addEventListener("click", () => {
+    SecurePlayer.hideError();
+    SecurePlayer.init();
+  });
 
   // Add copy link functionality
   document.getElementById("copy-link").addEventListener("click", async () => {

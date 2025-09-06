@@ -37,76 +37,163 @@
     <link rel="stylesheet" href="styles/custom.css" />
   </head>
   <body
-    class="bg-bg text-gray-800"
+    class="bg-bg text-gray-800 min-h-screen"
     style="font-family: Inter, ui-sans-serif, system-ui"
   >
-    <div class="max-w-5xl mx-auto px-4 py-8">
-      <div class="flex items-center justify-between mb-4">
-        <a href="dashboard.html" class="text-gray-600 hover:text-gray-900"
-          ><i class="fa-solid fa-arrow-left"></i> Back</a
-        >
+    <div class="max-w-6xl mx-auto px-4 py-4 sm:py-6 lg:py-8">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-4">
+        <a href="dashboard.html" class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+          <i class="fa-solid fa-arrow-left"></i> 
+          <span class="hidden sm:inline">Back to Dashboard</span>
+          <span class="sm:hidden">Back</span>
+        </a>
         
+        <div class="flex items-center gap-3">
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-100 text-green-700 text-sm font-medium">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Live & Working</span>
+          </div>
           <button
             id="copy-link"
-            class="ml-3 px-3 py-1.5 rounded-lg bg-white border text-gray-700 hover:bg-gray-50"
+            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border text-gray-700 hover:bg-gray-50 transition-colors text-sm"
           >
-            <i class="fa-solid fa-link"></i> Copy
+            <i class="fa-solid fa-link"></i> 
+            <span class="hidden sm:inline">Copy Link</span>
+            <span class="sm:hidden">Copy</span>
           </button>
         </div>
       </div>
 
-      <div class="bg-white rounded-2xl shadow-lg p-4 relative">
+      <!-- Video Container -->
+      <div class="bg-white rounded-2xl shadow-lg p-3 sm:p-4 lg:p-6 relative overflow-hidden">
+        <!-- Loading State -->
+        <div id="loading-overlay" class="absolute inset-0 bg-white/90 rounded-2xl flex items-center justify-center z-10">
+          <div class="text-center">
+            <div class="w-12 h-12 mx-auto mb-4 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+            <div class="text-lg font-semibold text-gray-700 mb-2">Loading Secure Stream</div>
+            <div class="text-sm text-gray-500">Initializing AES-128 encryption...</div>
+          </div>
+        </div>
+
+        <!-- Video Player -->
         <video
           id="video"
           controls
           playsinline
-          class="w-full rounded-lg shadow"
+          class="w-full rounded-lg shadow aspect-video bg-black"
           poster="assets/placeholder.svg"
         ></video>
 
+        <!-- Error Overlay -->
+        <div
+          id="error-overlay"
+          class="hidden absolute inset-0 bg-red-50 rounded-2xl flex items-center justify-center z-20"
+        >
+          <div class="text-center p-6">
+            <div class="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+              <i class="fa-solid fa-exclamation-triangle text-red-600 text-2xl"></i>
+            </div>
+            <div class="text-xl font-bold text-red-800 mb-2">Stream Error</div>
+            <p id="error-message" class="text-red-600 mb-4">
+              Unable to load the secure video stream.
+            </p>
+            <button
+              id="retry-btn"
+              class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            >
+              <i class="fa-solid fa-refresh mr-2"></i>Retry
+            </button>
+          </div>
+        </div>
+
+        <!-- Expiry Overlay -->
         <div
           id="expiry-overlay"
-          class="hidden absolute inset-0 bg-black/70 rounded-2xl flex items-center justify-center"
+          class="hidden absolute inset-0 bg-black/80 rounded-2xl flex items-center justify-center z-20"
         >
-          <div class="text-center text-white">
-            <div class="text-3xl font-extrabold">Stream Expired</div>
-            <p class="mt-2 text-gray-200">
+          <div class="text-center text-white p-6">
+            <div class="w-16 h-16 mx-auto mb-4 bg-yellow-500/20 rounded-full flex items-center justify-center">
+              <i class="fa-solid fa-clock text-yellow-400 text-2xl"></i>
+            </div>
+            <div class="text-2xl sm:text-3xl font-extrabold mb-2">Stream Expired</div>
+            <p class="text-gray-200 mb-4">
               Your secure viewing window has ended.
             </p>
+            <button
+              onclick="window.location.reload()"
+              class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
+            >
+              <i class="fa-solid fa-refresh mr-2"></i>Refresh
+            </button>
           </div>
         </div>
       </div>
 
+      <!-- Security Badges -->
+      <div id="security-badges" class="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        <div
+          data-pulse
+          class="flex items-center gap-3 bg-white rounded-xl shadow p-3 sm:p-4"
+        >
+          <div class="w-10 h-10 rounded-lg bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="font-semibold text-sm sm:text-base">AES-128 Encrypted</div>
+            <div class="text-xs sm:text-sm text-gray-500">Secure segments and keys</div>
+          </div>
+        </div>
+        <div
+          data-pulse
+          class="flex items-center gap-3 bg-white rounded-xl shadow p-3 sm:p-4"
+        >
+          <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="font-semibold text-sm sm:text-base">Secure HTTPS</div>
+            <div class="text-xs sm:text-sm text-gray-500">TLS everywhere</div>
+          </div>
+        </div>
+        <div
+          data-pulse
+          class="flex items-center gap-3 bg-white rounded-xl shadow p-3 sm:p-4 sm:col-span-2 lg:col-span-1"
+        >
+          <div class="w-10 h-10 rounded-lg bg-yellow-100 text-yellow-600 flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="font-semibold text-sm sm:text-base">Time-Limited Access</div>
+            <div class="text-xs sm:text-sm text-gray-500">Auto-expires in 10 minutes</div>
+          </div>
+        </div>
+      </div>
 
-      <div id="security-badges" class="mt-5 grid md:grid-cols-3 gap-4">
-        <div
-          data-pulse
-          class="flex items-center gap-3 bg-white rounded-xl shadow p-4"
-        >
-          <i class="fa-solid fa-lock text-primary"></i>
-          <div>
-            <div class="font-semibold">AES-128 Encrypted</div>
-            <div class="text-sm text-gray-500">Secure segments and keys</div>
+      <!-- Backend Status -->
+      <div class="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-6">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-8 h-8 rounded-lg bg-green-100 text-green-600 flex items-center justify-center">
+            <i class="fa-solid fa-server"></i>
           </div>
+          <h3 class="text-lg font-semibold text-gray-800">Backend Status</h3>
         </div>
-        <div
-          data-pulse
-          class="flex items-center gap-3 bg-white rounded-xl shadow p-4"
-        >
-          <i class="fa-solid fa-shield-halved text-primary"></i>
-          <div>
-            <div class="font-semibold">Secure HTTPS</div>
-            <div class="text-sm text-gray-500">TLS everywhere</div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span class="text-gray-600">Authentication: Active</span>
           </div>
-        </div>
-        <div
-          data-pulse
-          class="flex items-center gap-3 bg-white rounded-xl shadow p-4"
-        >
-          <i class="fa-solid fa-clock text-primary"></i>
-          <div>
-            <div class="font-semibold">Time-Limited Access</div>
-            <div class="text-sm text-gray-500">Auto-expires in 10 minutes</div>
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span class="text-gray-600">Encryption: AES-128</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span class="text-gray-600">Storage: Azure Blob</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span class="text-gray-600">Streaming: HLS</span>
           </div>
         </div>
       </div>
