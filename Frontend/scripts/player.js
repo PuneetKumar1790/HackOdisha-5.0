@@ -23,6 +23,12 @@ class SecurePlayer {
     let timeLeft = 600; // 10 minutes in seconds
     const countdownElement = document.getElementById("countdown");
 
+    // Only start countdown if the element exists
+    if (!countdownElement) {
+      console.log("Countdown element not found, skipping countdown timer");
+      return;
+    }
+
     const timer = setInterval(() => {
       timeLeft--;
 
@@ -39,7 +45,10 @@ class SecurePlayer {
 
       if (timeLeft <= 0) {
         clearInterval(timer);
-        document.getElementById("expiry-overlay").classList.remove("hidden");
+        const expiryOverlay = document.getElementById("expiry-overlay");
+        if (expiryOverlay) {
+          expiryOverlay.classList.remove("hidden");
+        }
         // Pause video if it's playing
         const video = document.getElementById("video");
         if (video) {

@@ -20,6 +20,8 @@ const __dirname = path.dirname(__filename);
 const allowedOrigins = [
   "http://127.0.0.1:5500",
   "http://localhost:5500",
+  "http://127.0.0.1:5501",
+  "http://localhost:5501",
   "http://127.0.0.1:5000",
   "http://localhost:5000",
   "https://hack-odisha-5-0.vercel.app/",

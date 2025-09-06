@@ -8,6 +8,7 @@ import {
 import { Router } from "express";
 import dotenv from "dotenv";
 import verifyToken from "../middlewares/auth.js";
+import { WatchSession } from "../models/WatchSession.js";
 
 dotenv.config();
 const router = Router();
@@ -16,16 +17,24 @@ const accountName = process.env.AZURE_ACCOUNT_NAME;
 const accountKey = process.env.AZURE_ACCOUNT_KEY;
 const containerName = "videos";
 
-const sharedKeyCredential = new StorageSharedKeyCredential(
-  accountName,
-  accountKey
-);
+// Check if Azure credentials are available
+const hasAzureCredentials = accountName && accountKey;
 
-// Azure Blob Service client
-const blobServiceClient = new BlobServiceClient(
-  `https://${accountName}.blob.core.windows.net`,
-  sharedKeyCredential
-);
+let sharedKeyCredential = null;
+let blobServiceClient = null;
+
+if (hasAzureCredentials) {
+  sharedKeyCredential = new StorageSharedKeyCredential(
+    accountName,
+    accountKey
+  );
+
+  // Azure Blob Service client
+  blobServiceClient = new BlobServiceClient(
+    `https://${accountName}.blob.core.windows.net`,
+    sharedKeyCredential
+  );
+}
 
 // Generate short-lived SAS URL for a blob (2 minutes default)
 
@@ -195,6 +204,28 @@ router.get("/:id", verifyToken, async (req, res) => {
     let session = await WatchSession.findOne({ userId, videoId });
     if (!session) {
       session = await WatchSession.create({ userId, videoId });
+    }
+
+    // Check if Azure credentials are available
+    if (!hasAzureCredentials) {
+      console.log("Azure credentials not available, serving demo content");
+      // Serve a demo M3U8 playlist for testing
+      const demoM3U8 = `#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-TARGETDURATION:10
+#EXT-X-MEDIA-SEQUENCE:0
+#EXT-X-KEY:METHOD=AES-128,URI="https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8"
+#EXTINF:9.009,
+https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8
+#EXT-X-ENDLIST`;
+
+      // Set appropriate headers for HLS streaming
+      res.setHeader("Content-Type", "application/vnd.apple.mpegurl");
+      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+      res.setHeader("Pragma", "no-cache");
+      res.setHeader("Expires", "0");
+
+      return res.send(demoM3U8);
     }
 
     // Read existing .m3u8 from Azure

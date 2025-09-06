@@ -3,7 +3,7 @@
 const isLocalhost =
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1";
-const isLiveServer = window.location.port === "5500";
+const isLiveServer = window.location.port === "5500" || window.location.port === "5501";
 const isVercelDeployment =
   window.location.hostname === "https://hack-odisha-5-0.vercel.app";
 

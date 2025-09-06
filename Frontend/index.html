@@ -407,6 +407,13 @@
       </div>
     </div>
 
+    <!-- Import Auth module -->
+    <script type="module">
+      import { Auth } from "./scripts/auth.js";
+      // Make Auth available globally
+      window.Auth = Auth;
+    </script>
+
     <script>
       // Set current year in footer
       document.getElementById("yr").textContent = new Date().getFullYear();
@@ -562,13 +569,16 @@
         submitBtn.textContent = "Logging in...";
 
         try {
-          // Simulate login - replace with actual API call
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          localStorage.setItem("isLoggedIn", "true");
-          showSuccess("Login successful! Redirecting...");
-          setTimeout(() => {
-            window.location.href = "dashboard.html";
-          }, 1000);
+          // Use actual Auth API call
+          const result = await Auth.login(email, password);
+          if (result.success) {
+            showSuccess("Login successful! Redirecting...");
+            setTimeout(() => {
+              window.location.href = "dashboard.html";
+            }, 1000);
+          } else {
+            showError("Login failed. Please try again.");
+          }
         } catch (error) {
           showError(error.message || "Login failed. Please try again.");
         } finally {
@@ -595,12 +605,16 @@
         submitBtn.textContent = "Creating account...";
 
         try {
-          // Simulate signup - replace with actual API call
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          showSuccess("Account created successfully! You can now login.");
-          setTimeout(() => {
-            toggleMode(); // Switch to login mode
-          }, 1000);
+          // Use actual Auth API call
+          const result = await Auth.signup(username, email, password);
+          if (result.success) {
+            showSuccess("Account created successfully! You can now login.");
+            setTimeout(() => {
+              toggleMode(); // Switch to login mode
+            }, 1000);
+          } else {
+            showError("Signup failed. Please try again.");
+          }
         } catch (error) {
           showError(error.message || "Signup failed. Please try again.");
         } finally {

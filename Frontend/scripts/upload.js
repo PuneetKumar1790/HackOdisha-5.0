@@ -54,7 +54,7 @@ function startSimulation(fileName = "video.mp4") {
       drop.classList.remove("pointer-events-none", "opacity-50");
       showToast(`"${fileName}" protected successfully`);
       const demoBtn = document.getElementById("view-player");
-      demoBtn.href = "player.html?demo=true";
+      demoBtn.href = "player.html?id=social";
     } else {
       progressBar.style.width = Math.floor(pct) + "%";
     }
