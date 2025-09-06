@@ -47,6 +47,9 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+// Trust proxy for proper HTTPS detection in production
+app.set('trust proxy', 1);
+
 // Serve Frontend statically for same-origin cookies in dev/prod
 const frontendDir = path.resolve(__dirname, "../Frontend");
 app.use(express.static(frontendDir));

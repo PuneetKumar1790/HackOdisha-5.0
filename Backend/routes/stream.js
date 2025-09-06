@@ -239,7 +239,37 @@ https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.m
     // This ensures fresh SAS URLs are generated for each request
 
     // Get the base URL for absolute URLs
-    const baseUrl = `${req.protocol}://${req.get("host")}`;
+    // Handle proxy headers and force HTTPS in production to avoid mixed content issues
+    const isProduction = process.env.NODE_ENV === "production";
+    let protocol = req.protocol;
+    
+    // Check for proxy headers that indicate HTTPS
+    if (isProduction && (
+      req.get('x-forwarded-proto') === 'https' || 
+      req.get('x-forwarded-ssl') === 'on' ||
+      req.secure
+    )) {
+      protocol = 'https';
+    } else if (isProduction) {
+      // Force HTTPS in production as fallback
+      protocol = 'https';
+    }
+    
+    const baseUrl = `${protocol}://${req.get("host")}`;
+    
+    // Debug logging for production troubleshooting
+    if (isProduction) {
+      console.log("URL Generation Debug:", {
+        originalProtocol: req.protocol,
+        finalProtocol: protocol,
+        host: req.get("host"),
+        baseUrl,
+        forwardedProto: req.get('x-forwarded-proto'),
+        forwardedSsl: req.get('x-forwarded-ssl'),
+        secure: req.secure,
+        headers: req.headers
+      });
+    }
 
     // Replace AES key URL with absolute backend proxy URL
     m3u8Content = m3u8Content.replace(
