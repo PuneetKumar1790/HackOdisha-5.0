@@ -23,7 +23,7 @@ const allowedOrigins = [
   "http://127.0.0.1:5000",
   "http://localhost:5000",
   "https://hack-odisha-5-0.vercel.app/",
-  "https://hackathon-hh42.onrender.com",
+  "https://hackodisha-5-0.onrender.com/",
 ];
 
 app.use(
