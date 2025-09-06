@@ -31,7 +31,6 @@
       rel="stylesheet"
     />
 
-    
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.11/dist/hls.min.js"></script>
 
     <link rel="stylesheet" href="styles/custom.css" />
@@ -42,15 +41,22 @@
   >
     <div class="max-w-6xl mx-auto px-4 py-4 sm:py-6 lg:py-8">
       <!-- Header -->
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-4">
-        <a href="dashboard.html" class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-          <i class="fa-solid fa-arrow-left"></i> 
+      <div
+        class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-4"
+      >
+        <a
+          href="dashboard.html"
+          class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+        >
+          <i class="fa-solid fa-arrow-left"></i>
           <span class="hidden sm:inline">Back to Dashboard</span>
           <span class="sm:hidden">Back</span>
         </a>
-        
+
         <div class="flex items-center gap-3">
-          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-100 text-green-700 text-sm font-medium">
+          <div
+            class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-100 text-green-700 text-sm font-medium"
+          >
             <i class="fa-solid fa-circle-check"></i>
             <span>Live & Working</span>
           </div>
@@ -58,7 +64,7 @@
             id="copy-link"
             class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border text-gray-700 hover:bg-gray-50 transition-colors text-sm"
           >
-            <i class="fa-solid fa-link"></i> 
+            <i class="fa-solid fa-link"></i>
             <span class="hidden sm:inline">Copy Link</span>
             <span class="sm:hidden">Copy</span>
           </button>
@@ -66,13 +72,24 @@
       </div>
 
       <!-- Video Container -->
-      <div class="bg-white rounded-2xl shadow-lg p-3 sm:p-4 lg:p-6 relative overflow-hidden">
+      <div
+        class="bg-white rounded-2xl shadow-lg p-3 sm:p-4 lg:p-6 relative overflow-hidden"
+      >
         <!-- Loading State -->
-        <div id="loading-overlay" class="absolute inset-0 bg-white/90 rounded-2xl flex items-center justify-center z-10">
+        <div
+          id="loading-overlay"
+          class="absolute inset-0 bg-white/90 rounded-2xl flex items-center justify-center z-10"
+        >
           <div class="text-center">
-            <div class="w-12 h-12 mx-auto mb-4 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-            <div class="text-lg font-semibold text-gray-700 mb-2">Loading Secure Stream</div>
-            <div class="text-sm text-gray-500">Initializing AES-128 encryption...</div>
+            <div
+              class="w-12 h-12 mx-auto mb-4 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"
+            ></div>
+            <div class="text-lg font-semibold text-gray-700 mb-2">
+              Loading Secure Stream
+            </div>
+            <div class="text-sm text-gray-500">
+              Initializing AES-128 encryption...
+            </div>
           </div>
         </div>
 
@@ -91,8 +108,12 @@
           class="hidden absolute inset-0 bg-red-50 rounded-2xl flex items-center justify-center z-20"
         >
           <div class="text-center p-6">
-            <div class="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
-              <i class="fa-solid fa-exclamation-triangle text-red-600 text-2xl"></i>
+            <div
+              class="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center"
+            >
+              <i
+                class="fa-solid fa-exclamation-triangle text-red-600 text-2xl"
+              ></i>
             </div>
             <div class="text-xl font-bold text-red-800 mb-2">Stream Error</div>
             <p id="error-message" class="text-red-600 mb-4">
@@ -113,10 +134,14 @@
           class="hidden absolute inset-0 bg-black/80 rounded-2xl flex items-center justify-center z-20"
         >
           <div class="text-center text-white p-6">
-            <div class="w-16 h-16 mx-auto mb-4 bg-yellow-500/20 rounded-full flex items-center justify-center">
+            <div
+              class="w-16 h-16 mx-auto mb-4 bg-yellow-500/20 rounded-full flex items-center justify-center"
+            >
               <i class="fa-solid fa-clock text-yellow-400 text-2xl"></i>
             </div>
-            <div class="text-2xl sm:text-3xl font-extrabold mb-2">Stream Expired</div>
+            <div class="text-2xl sm:text-3xl font-extrabold mb-2">
+              Stream Expired
+            </div>
             <p class="text-gray-200 mb-4">
               Your secure viewing window has ended.
             </p>
@@ -131,49 +156,93 @@
       </div>
 
       <!-- Security Badges -->
-      <div id="security-badges" class="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+      <div
+        id="security-badges"
+        class="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
+      >
         <div
           data-pulse
           class="flex items-center gap-3 bg-white rounded-xl shadow p-3 sm:p-4"
         >
-          <div class="w-10 h-10 rounded-lg bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0">
+          <div
+            class="w-10 h-10 rounded-lg bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0"
+          >
             <i class="fa-solid fa-lock"></i>
           </div>
           <div class="min-w-0">
-            <div class="font-semibold text-sm sm:text-base">AES-128 Encrypted</div>
-            <div class="text-xs sm:text-sm text-gray-500">Secure segments and keys</div>
+            <div class="font-semibold text-sm sm:text-base">
+              AES-128 Encrypted
+            </div>
+            <div class="text-xs sm:text-sm text-gray-500">
+              Protects video segments & keys
+            </div>
           </div>
         </div>
+
         <div
           data-pulse
           class="flex items-center gap-3 bg-white rounded-xl shadow p-3 sm:p-4"
         >
-          <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
+          <div
+            class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0"
+          >
             <i class="fa-solid fa-shield-halved"></i>
           </div>
           <div class="min-w-0">
             <div class="font-semibold text-sm sm:text-base">Secure HTTPS</div>
-            <div class="text-xs sm:text-sm text-gray-500">TLS everywhere</div>
+            <div class="text-xs sm:text-sm text-gray-500">
+              End-to-end TLS protection
+            </div>
           </div>
         </div>
+
         <div
           data-pulse
-          class="flex items-center gap-3 bg-white rounded-xl shadow p-3 sm:p-4 sm:col-span-2 lg:col-span-1"
+          class="flex items-center gap-3 bg-white rounded-xl shadow p-3 sm:p-4"
         >
-          <div class="w-10 h-10 rounded-lg bg-yellow-100 text-yellow-600 flex items-center justify-center flex-shrink-0">
+          <div
+            class="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center flex-shrink-0"
+          >
+            <i class="fa-solid fa-ban"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="font-semibold text-sm sm:text-base">
+              No Direct Blob Access
+            </div>
+            <div class="text-xs sm:text-sm text-gray-500">
+              Only proxied via secure backend
+            </div>
+          </div>
+        </div>
+
+        <div
+          data-pulse
+          class="flex items-center gap-3 bg-white rounded-xl shadow p-3 sm:p-4"
+        >
+          <div
+            class="w-10 h-10 rounded-lg bg-yellow-100 text-yellow-600 flex items-center justify-center flex-shrink-0"
+          >
             <i class="fa-solid fa-clock"></i>
           </div>
           <div class="min-w-0">
-            <div class="font-semibold text-sm sm:text-base">Time-Limited Access</div>
-            <div class="text-xs sm:text-sm text-gray-500">Auto-expires in 10 minutes</div>
+            <div class="font-semibold text-sm sm:text-base">
+              Time-Limited Access
+            </div>
+            <div class="text-xs sm:text-sm text-gray-500">
+              Auto-expires every 2 minutes
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Backend Status -->
-      <div class="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-6">
+      <div
+        class="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-6"
+      >
         <div class="flex items-center gap-3 mb-3">
-          <div class="w-8 h-8 rounded-lg bg-green-100 text-green-600 flex items-center justify-center">
+          <div
+            class="w-8 h-8 rounded-lg bg-green-100 text-green-600 flex items-center justify-center"
+          >
             <i class="fa-solid fa-server"></i>
           </div>
           <h3 class="text-lg font-semibold text-gray-800">Backend Status</h3>
