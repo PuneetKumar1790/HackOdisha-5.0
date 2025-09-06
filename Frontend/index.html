@@ -39,7 +39,35 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="styles/custom.css" />
+    <style>
+      /* Custom CSS for animations */
+      .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .pulse-encrypt {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    </style>
   </head>
   <body
     class="bg-bg text-textB font-sans"
@@ -262,32 +290,43 @@
     <section id="problem" class="max-w-6xl mx-auto px-4 py-16">
       <div class="grid md:grid-cols-3 gap-6">
         <div class="bg-white rounded-xl shadow-md p-6 fade-in">
-          <div class="text-sm font-medium text-gray-500">Annual loss</div>
+          <div class="text-sm font-medium text-gray-500">
+            Global annual loss
+          </div>
           <div class="mt-2 text-3xl font-extrabold text-textH">
-            ₹<span data-counter data-target="2000"></span> Cr
+            $<span class="counter" data-target="75">0</span>B
           </div>
           <p class="mt-2 text-sm text-gray-500">
-            Revenue lost to content piracy across Indian EdTech.
+            Total revenue lost to digital piracy worldwide.
+            <span class="block mt-1 text-xs text-blue-600"
+              >Source: Motion Picture Association</span
+            >
+          </p>
+        </div>
+        <div class="bg-white rounded-xl shadow-md p-6 fade-in">
+          <div class="text-sm font-medium text-gray-500">
+            Indian EdTech loss
+          </div>
+          <div class="mt-2 text-3xl font-extrabold text-textH">
+            ₹<span class="counter" data-target="2000">0</span> Cr
+          </div>
+          <p class="mt-2 text-sm text-gray-500">
+            Revenue lost to content piracy across Indian EdTech in 2024.
+            <span class="block mt-1 text-xs text-blue-600"
+              >Source: EY-IAMAI Report</span
+            >
           </p>
         </div>
         <div class="bg-white rounded-xl shadow-md p-6 fade-in">
           <div class="text-sm font-medium text-gray-500">Pirated content</div>
           <div class="mt-2 text-3xl font-extrabold text-textH">
-            <span data-counter data-target="62"></span
-            ><span data-suffix>%</span>
+            <span class="counter" data-target="62">0</span><span>%</span>
           </div>
           <p class="mt-2 text-sm text-gray-500">
             Courses experience unauthorized sharing within weeks of launch.
-          </p>
-        </div>
-        <div class="bg-white rounded-xl shadow-md p-6 fade-in">
-          <div class="text-sm font-medium text-gray-500">Cost reduction</div>
-          <div class="mt-2 text-3xl font-extrabold text-textH">
-            <span data-counter data-target="70"></span
-            ><span data-suffix>%</span>
-          </div>
-          <p class="mt-2 text-sm text-gray-500">
-            Cheaper than enterprise DRM with comparable protection.
+            <span class="block mt-1 text-xs text-blue-600"
+              >Source: VdoCipher Research</span
+            >
           </p>
         </div>
       </div>
@@ -368,18 +407,72 @@
       </div>
     </div>
 
-    <script type="module">
-      import {
-        initCounters,
-        initSmoothAnchors,
-        showToast,
-      } from "./scripts/router.js";
-      import { Auth } from "./scripts/auth.js";
-
+    <script>
+      // Set current year in footer
       document.getElementById("yr").textContent = new Date().getFullYear();
 
-      initCounters();
-      initSmoothAnchors();
+      // Counter animation function
+      function animateValue(element, start, end, duration) {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+          if (!startTimestamp) startTimestamp = timestamp;
+          const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+          const value = Math.floor(progress * (end - start) + start);
+          element.textContent = value.toLocaleString();
+          if (progress < 1) {
+            window.requestAnimationFrame(step);
+          }
+        };
+        window.requestAnimationFrame(step);
+      }
+
+      // Initialize counters when they come into view
+      function initCounters() {
+        const counters = document.querySelectorAll(".counter");
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const target = parseInt(
+                  entry.target.getAttribute("data-target")
+                );
+                animateValue(entry.target, 0, target, 2000);
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.5 }
+        );
+
+        counters.forEach((counter) => {
+          observer.observe(counter);
+        });
+      }
+
+      // Initialize fade-in animations
+      function initFadeIn() {
+        const fadeElements = document.querySelectorAll(".fade-in");
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+
+        fadeElements.forEach((element) => {
+          observer.observe(element);
+        });
+      }
+
+      // Initialize everything when DOM is loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        initCounters();
+        initFadeIn();
+      });
 
       // Modal management
       const authModal = document.getElementById("authModal");
@@ -469,7 +562,9 @@
         submitBtn.textContent = "Logging in...";
 
         try {
-          await Auth.login(email, password);
+          // Simulate login - replace with actual API call
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          localStorage.setItem("isLoggedIn", "true");
           showSuccess("Login successful! Redirecting...");
           setTimeout(() => {
             window.location.href = "dashboard.html";
@@ -500,7 +595,8 @@
         submitBtn.textContent = "Creating account...";
 
         try {
-          await Auth.signup(username, email, password);
+          // Simulate signup - replace with actual API call
+          await new Promise((resolve) => setTimeout(resolve, 1000));
           showSuccess("Account created successfully! You can now login.");
           setTimeout(() => {
             toggleMode(); // Switch to login mode
