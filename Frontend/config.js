@@ -5,7 +5,7 @@ const isLocalhost =
   window.location.hostname === "127.0.0.1";
 const isLiveServer = window.location.port === "5500" || window.location.port === "5501";
 const isVercelDeployment =
-  window.location.hostname === "https://hack-odisha-5-0.vercel.app";
+  window.location.hostname === "hack-odisha-5-0.vercel.app";
 
 let BASE_URL;
 
@@ -20,10 +20,10 @@ if (isLocalhost) {
   }
 } else if (isVercelDeployment) {
   // For Vercel deployment, use the deployed backend
-  BASE_URL = "https://hackodisha-5-0.onrender.com/";
+  BASE_URL = "https://hackodisha-5-0.onrender.com";
 } else {
   // Fallback for other deployments
-  BASE_URL = "https://hackodisha-5-0.onrender.com/";
+  BASE_URL = "https://hackodisha-5-0.onrender.com";
 }
 
 // Debug information (remove in production)
