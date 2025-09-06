@@ -45,11 +45,7 @@
         <a href="dashboard.html" class="text-gray-600 hover:text-gray-900"
           ><i class="fa-solid fa-arrow-left"></i> Back</a
         >
-        <div class="flex items-center gap-3">
-          <div class="text-sm">Link expires in</div>
-          <div id="countdown" class="text-2xl font-extrabold text-accent">
-            10:00
-          </div>
+        
           <button
             id="copy-link"
             class="ml-3 px-3 py-1.5 rounded-lg bg-white border text-gray-700 hover:bg-gray-50"
@@ -68,7 +64,6 @@
           poster="assets/placeholder.svg"
         ></video>
 
-        Expiry overlay
         <div
           id="expiry-overlay"
           class="hidden absolute inset-0 bg-black/70 rounded-2xl flex items-center justify-center"
@@ -82,7 +77,7 @@
         </div>
       </div>
 
-      Security badges
+
       <div id="security-badges" class="mt-5 grid md:grid-cols-3 gap-4">
         <div
           data-pulse
@@ -90,7 +85,7 @@
         >
           <i class="fa-solid fa-lock text-primary"></i>
           <div>
-            <div class="font-semibold">AES-256 Encrypted</div>
+            <div class="font-semibold">AES-128 Encrypted</div>
             <div class="text-sm text-gray-500">Secure segments and keys</div>
           </div>
         </div>
