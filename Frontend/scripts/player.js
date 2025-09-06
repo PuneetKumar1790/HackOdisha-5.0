@@ -105,6 +105,14 @@ class SecurePlayer {
         m3u8Content.substring(0, 200) + "..."
       );
 
+      // Check if this is demo content (no encryption)
+      if (m3u8Content.includes("demo.unified-streaming.com") || 
+          m3u8Content.includes("BigBuckBunny.mp4")) {
+        console.log("Detected demo content, switching to demo player");
+        this.initDemoPlayer();
+        return;
+      }
+
       const video = document.getElementById("video");
 
       if (Hls.isSupported()) {

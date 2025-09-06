@@ -209,14 +209,13 @@ router.get("/:id", verifyToken, async (req, res) => {
     // Check if Azure credentials are available
     if (!hasAzureCredentials) {
       console.log("Azure credentials not available, serving demo content");
-      // Serve a demo M3U8 playlist for testing
+      // Serve a simple demo M3U8 that will trigger demo player mode
       const demoM3U8 = `#EXTM3U
 #EXT-X-VERSION:3
 #EXT-X-TARGETDURATION:10
 #EXT-X-MEDIA-SEQUENCE:0
-#EXT-X-KEY:METHOD=AES-128,URI="https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8"
-#EXTINF:9.009,
-https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8
+#EXTINF:10.0,
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
 #EXT-X-ENDLIST`;
 
       // Set appropriate headers for HLS streaming
