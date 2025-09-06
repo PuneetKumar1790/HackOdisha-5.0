@@ -1,4 +1,3 @@
-import WatchSession from "../models/WatchSession.js";
 import {
   generateBlobSASQueryParameters,
   BlobSASPermissions,

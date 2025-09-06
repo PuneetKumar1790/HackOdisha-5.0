@@ -22,8 +22,8 @@ const allowedOrigins = [
   "http://localhost:5500",
   "http://127.0.0.1:5000",
   "http://localhost:5000",
-  "https://hackathon-j9xm.vercel.app",
-  "https://hackathon-hh42.onrender.com", // Add your backend domain for CORS
+  "https://hack-odisha-5-0.vercel.app/",
+  "https://hackathon-hh42.onrender.com",
 ];
 
 app.use(
