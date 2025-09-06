@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ShieldStream — Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#2563EB",
+              secondary: "#10B981",
+              accent: "#F59E0B",
+              bg: "#F9FAFB",
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/custom.css" />
+  </head>
+  <body
+    class="bg-bg text-gray-700"
+    style="font-family: Inter, ui-sans-serif, system-ui"
+  >
+    <div class="min-h-screen flex">
+      <!-- Sidebar -->
+      <aside
+        class="w-64 bg-white border-r border-gray-100 hidden md:flex md:flex-col"
+      >
+        <div class="p-4 flex items-center gap-3">
+          <img
+            src="assets/images/shieldstream-logo.jpeg"
+            alt="ShieldStream"
+            class="w-9 h-9 rounded-lg"
+          />
+          <span class="font-extrabold text-lg">ShieldStream</span>
+        </div>
+        <div class="px-3">
+          <a
+            href="dashboard.html"
+            data-nav
+            class="flex items-center gap-3 px-3 py-2 rounded-lg bg-blue-50 text-blue-800 transition"
+          >
+            <i class="fa-solid fa-gauge-high"></i> Dashboard
+          </a>
+          <a
+            href="upload.html"
+            data-nav
+            class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition"
+          >
+            <i class="fa-solid fa-cloud-arrow-up"></i> Upload New
+          </a>
+          <a
+            href="#"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 cursor-not-allowed"
+          >
+            <i class="fa-solid fa-chart-column"></i> Analytics
+          </a>
+          <button
+            id="logoutBtn"
+            class="mt-4 flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 hover:text-red-600 transition w-full text-left"
+          >
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </button>
+        </div>
+        <div class="mt-auto p-4 text-sm text-gray-500">
+          Logged in as <span id="userName" class="font-medium">Demo User</span>
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <main class="flex-1">
+        <div class="max-w-6xl mx-auto px-4 py-6">
+          <!-- Welcome -->
+          <div
+            class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 rounded-2xl shadow-lg flex items-center justify-between"
+          >
+            <div>
+              <h1 class="text-2xl font-bold">
+                Welcome back, <span id="welcomeName">Demo User</span>!
+              </h1>
+              <p class="opacity-90 mt-1">
+                You've protected <span class="font-semibold">12</span> videos
+                this month.
+              </p>
+            </div>
+            <a
+              href="upload.html"
+              class="px-5 py-3 bg-white text-gray-900 font-semibold rounded-xl shadow hover:scale-[1.02] transition"
+            >
+              Upload a New Video
+            </a>
+          </div>
+
+          <!-- Stats -->
+          <div class="grid md:grid-cols-3 gap-6 mt-6">
+            <div class="bg-white rounded-xl shadow-md p-5">
+              <div class="text-sm text-gray-500">Videos Protected</div>
+              <div class="mt-1 text-3xl font-extrabold text-gray-900">48</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-5">
+              <div class="text-sm text-gray-500">Active Links</div>
+              <div class="mt-1 text-3xl font-extrabold text-gray-900">9</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-5">
+              <div class="text-sm text-gray-500">Est. Loss Prevented</div>
+              <div class="mt-1 text-3xl font-extrabold text-gray-900">
+                ₹24,50,000
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Videos -->
+          <div class="bg-white rounded-xl shadow-md mt-6">
+            <div
+              class="p-5 border-b border-gray-100 flex items-center justify-between"
+            >
+              <h2 class="font-semibold text-gray-900">Recent Videos</h2>
+              <a href="upload.html" class="text-primary hover:underline"
+                >Upload New</a
+              >
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-sm">
+                <thead class="bg-gray-50 text-gray-600">
+                  <tr>
+                    <th class="text-left px-5 py-3">Thumbnail</th>
+                    <th class="text-left px-5 py-3">Video Name</th>
+                    <th class="text-left px-5 py-3">Status</th>
+                    <th class="text-left px-5 py-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y">
+                  <!-- Social Network Movie (Real Backend Stream) -->
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-5 py-3">
+                      <div
+                        class="w-24 h-14 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center"
+                      >
+                        <i class="fas fa-play text-white text-xl"></i>
+                      </div>
+                    </td>
+                    <td class="px-5 py-3 font-medium text-gray-900">
+                      Social Network Movie
+                      <div class="text-xs text-blue-600 font-medium">
+                        Live Stream Available
+                      </div>
+                    </td>
+                    <td class="px-5 py-3">
+                      <span
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 text-emerald-700"
+                      >
+                        <i class="fa-solid fa-shield-halved"></i> Secure
+                      </span>
+                    </td>
+                    <td class="px-5 py-3">
+                      <div class="flex items-center gap-3">
+                        <a
+                          href="player.html?id=social"
+                          class="text-primary hover:underline font-medium"
+                          >▶ Stream Now</a
+                        >
+                        <button
+                          class="copy-link text-gray-600 hover:text-gray-900"
+                          data-url="player.html?id=social"
+                        >
+                          Copy Link
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Demo Row 1 -->
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-5 py-3">
+                      <div
+                        class="w-24 h-14 rounded-lg bg-gray-200 flex items-center justify-center"
+                      >
+                        <i class="fas fa-book text-gray-500"></i>
+                      </div>
+                    </td>
+                    <td class="px-5 py-3 font-medium text-gray-900">
+                      Algebra - Lecture 01
+                    </td>
+                    <td class="px-5 py-3">
+                      <span
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 text-emerald-700"
+                      >
+                        <i class="fa-solid fa-shield-halved"></i> Secure
+                      </span>
+                    </td>
+                    <td class="px-5 py-3">
+                      <div class="flex items-center gap-3">
+                        <a
+                          href="player.html?demo=true"
+                          class="text-primary hover:underline"
+                          >Play</a
+                        >
+                        <button
+                          class="copy-link text-gray-600 hover:text-gray-900"
+                          data-url="player.html?demo=true"
+                        >
+                          Copy Link
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Demo Row 2 -->
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-5 py-3">
+                      <div
+                        class="w-24 h-14 rounded-lg bg-gray-200 flex items-center justify-center"
+                      >
+                        <i class="fas fa-flask text-gray-500"></i>
+                      </div>
+                    </td>
+                    <td class="px-5 py-3 font-medium text-gray-900">
+                      Organic Chemistry - Intro
+                    </td>
+                    <td class="px-5 py-3">
+                      <span
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-50 text-amber-700"
+                      >
+                        <i class="fa-solid fa-rotate"></i> Processing
+                      </span>
+                    </td>
+                    <td class="px-5 py-3">
+                      <div class="flex items-center gap-3 opacity-60">
+                        <span>Play</span>
+                        <span>Copy Link</span>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Demo Row 3 -->
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-5 py-3">
+                      <div
+                        class="w-24 h-14 rounded-lg bg-gray-200 flex items-center justify-center"
+                      >
+                        <i class="fas fa-atom text-gray-500"></i>
+                      </div>
+                    </td>
+                    <td class="px-5 py-3 font-medium text-gray-900">
+                      Physics - Kinematics
+                    </td>
+                    <td class="px-5 py-3">
+                      <span
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 text-emerald-700"
+                      >
+                        <i class="fa-solid fa-shield-halved"></i> Secure
+                      </span>
+                    </td>
+                    <td class="px-5 py-3">
+                      <div class="flex items-center gap-3">
+                        <a
+                          href="player.html?demo=true"
+                          class="text-primary hover:underline"
+                          >Play</a
+                        >
+                        <button
+                          class="copy-link text-gray-600 hover:text-gray-900"
+                          data-url="player.html?demo=true"
+                        >
+                          Copy Link
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-check-circle text-green-500"></i>
+        <span id="toast-message">Link copied to clipboard</span>
+      </div>
+    </div>
+
+    <script type="module">
+      import { Auth } from "./scripts/auth.js";
+
+      // Check authentication first
+      async function initDashboard() {
+        const isAuth = await Auth.requireAuth();
+        if (!isAuth) return;
+
+        const user = await Auth.getUser();
+        if (user) {
+          document.getElementById("userName").textContent =
+            user.username || user.name;
+          document.getElementById("welcomeName").textContent =
+            user.username || user.name;
+        }
+      }
+
+      // Initialize dashboard
+      initDashboard();
+
+      // Logout functionality
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        if (confirm("Are you sure you want to logout?")) {
+          Auth.logout();
+        }
+      });
+
+      // Copy link functionality
+      document.querySelectorAll(".copy-link").forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+          e.preventDefault();
+          const url = window.location.origin + "/" + btn.dataset.url;
+
+          try {
+            await navigator.clipboard.writeText(url);
+            showToast("Link copied to clipboard");
+          } catch (error) {
+            console.error("Failed to copy:", error);
+            // Fallback for older browsers
+            const textArea = document.createElement("textarea");
+            textArea.value = url;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+            showToast("Link copied to clipboard");
+          }
+        });
+      });
+
+      // Toast notification function
+      function showToast(message) {
+        const toast = document.getElementById("toast");
+        const toastMessage = document.getElementById("toast-message");
+
+        toastMessage.textContent = message;
+        toast.classList.add("show");
+
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+
+      // Make showToast available globally
+      window.showToast = showToast;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ShieldStream — Secure Player</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#2563EB",
+              secondary: "#10B981",
+              accent: "#F59E0B",
+              bg: "#F9FAFB",
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    HLS.js
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.11/dist/hls.min.js"></script>
+
+    <link rel="stylesheet" href="styles/custom.css" />
+  </head>
+  <body
+    class="bg-bg text-gray-800"
+    style="font-family: Inter, ui-sans-serif, system-ui"
+  >
+    <div class="max-w-5xl mx-auto px-4 py-8">
+      <div class="flex items-center justify-between mb-4">
+        <a href="dashboard.html" class="text-gray-600 hover:text-gray-900"
+          ><i class="fa-solid fa-arrow-left"></i> Back</a
+        >
+        <div class="flex items-center gap-3">
+          <div class="text-sm">Link expires in</div>
+          <div id="countdown" class="text-2xl font-extrabold text-accent">
+            10:00
+          </div>
+          <button
+            id="copy-link"
+            class="ml-3 px-3 py-1.5 rounded-lg bg-white border text-gray-700 hover:bg-gray-50"
+          >
+            <i class="fa-solid fa-link"></i> Copy
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-lg p-4 relative">
+        <video
+          id="video"
+          controls
+          playsinline
+          class="w-full rounded-lg shadow"
+          poster="assets/placeholder.svg"
+        ></video>
+
+        Expiry overlay
+        <div
+          id="expiry-overlay"
+          class="hidden absolute inset-0 bg-black/70 rounded-2xl flex items-center justify-center"
+        >
+          <div class="text-center text-white">
+            <div class="text-3xl font-extrabold">Stream Expired</div>
+            <p class="mt-2 text-gray-200">
+              Your secure viewing window has ended.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      Security badges
+      <div id="security-badges" class="mt-5 grid md:grid-cols-3 gap-4">
+        <div
+          data-pulse
+          class="flex items-center gap-3 bg-white rounded-xl shadow p-4"
+        >
+          <i class="fa-solid fa-lock text-primary"></i>
+          <div>
+            <div class="font-semibold">AES-256 Encrypted</div>
+            <div class="text-sm text-gray-500">Secure segments and keys</div>
+          </div>
+        </div>
+        <div
+          data-pulse
+          class="flex items-center gap-3 bg-white rounded-xl shadow p-4"
+        >
+          <i class="fa-solid fa-shield-halved text-primary"></i>
+          <div>
+            <div class="font-semibold">Secure HTTPS</div>
+            <div class="text-sm text-gray-500">TLS everywhere</div>
+          </div>
+        </div>
+        <div
+          data-pulse
+          class="flex items-center gap-3 bg-white rounded-xl shadow p-4"
+        >
+          <i class="fa-solid fa-clock text-primary"></i>
+          <div>
+            <div class="font-semibold">Time-Limited Access</div>
+            <div class="text-sm text-gray-500">Auto-expires in 10 minutes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import "./scripts/player.js";
+    </script>
+  </body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ShieldStream — Upload</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#2563EB",
+              secondary: "#10B981",
+              accent: "#F59E0B",
+              bg: "#F9FAFB",
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/custom.css" />
+  </head>
+  <body
+    class="bg-bg text-gray-700"
+    style="font-family: Inter, ui-sans-serif, system-ui"
+  >
+    <div class="max-w-4xl mx-auto px-4 py-10">
+      <div class="flex items-center justify-between mb-6">
+        <a
+          href="dashboard.html"
+          class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900"
+        >
+          <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </a>
+        <button id="logoutBtn" class="text-gray-500 hover:text-red-600">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-lg p-8">
+        <h1 class="text-2xl font-bold text-gray-900">Upload a New Video</h1>
+        <p class="text-gray-500 mt-1">
+          Drag and drop a file below. The process is simulated for demo
+          purposes.
+        </p>
+
+        Dropzone
+        <div
+          id="dropzone"
+          class="mt-6 border-2 border-dashed border-gray-300 rounded-xl p-10 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary transition"
+        >
+          <div
+            class="w-14 h-14 rounded-xl bg-blue-50 text-primary flex items-center justify-center mb-4 pulse-encrypt"
+          >
+            <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+          </div>
+          <p class="font-medium">Drag & drop your video here</p>
+          <p class="text-sm text-gray-500 mt-1">or click to select a file</p>
+          <input type="file" id="file-input" accept="video/*" class="hidden" />
+        </div>
+
+        Progress
+        <div id="progress" class="mt-6 hidden">
+          <div class="flex items-center justify-between text-sm">
+            <span id="status" class="font-medium">Uploading...</span>
+            <span id="pct" class="text-gray-500"></span>
+          </div>
+          <div class="w-full bg-gray-100 rounded-full h-3 mt-2 overflow-hidden">
+            <div
+              id="progress-bar"
+              class="bg-primary h-3 w-0 transition-all"
+            ></div>
+          </div>
+        </div>
+
+        Complete actions
+        <div id="complete-actions" class="mt-6 hidden">
+          <div
+            class="inline-flex items-center gap-3 px-4 py-2 rounded-lg bg-green-50 text-emerald-700"
+          >
+            <i class="fa-solid fa-circle-check"></i> Video protected
+            successfully!
+          </div>
+          <div class="mt-4 flex gap-3">
+            <a
+              id="view-player"
+              href="#"
+              class="px-5 py-3 rounded-xl bg-accent text-gray-900 font-semibold shadow hover:scale-[1.02] transition"
+            >
+              View Secure Player
+            </a>
+            <a
+              href="dashboard.html"
+              class="px-5 py-3 rounded-xl bg-gray-900 text-white font-semibold shadow hover:scale-[1.02] transition"
+            >
+              Back to Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import "./scripts/upload.js";
+      import { Auth } from "./scripts/auth.js";
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", () => Auth.logout());
+    </script>
+  </body>
+</html>
