@@ -58,7 +58,7 @@ app.get("/", (req, res) => {
 //Mounting route handlers
 app.use("/api/auth", authRoutes); //Signup,login,Me
 app.use("/api/refresh", refreshRoutes);
-app.use("/api/stream", streamRoutes);
+app.use("/api/stream/social", streamRoutes);
 
 // MongoDB connection
 const connectDB = async () => {

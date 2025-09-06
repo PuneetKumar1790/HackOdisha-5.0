@@ -20,6 +20,23 @@ const containerName = "videos";
 // Check if Azure credentials are available
 const hasAzureCredentials = accountName && accountKey;
 
+// Health check endpoint for streaming service
+router.get("/health", (req, res) => {
+  const healthStatus = {
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    azureCredentials: hasAzureCredentials,
+    environment: process.env.NODE_ENV || "development"
+  };
+  
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  
+  res.json(healthStatus);
+});
+
 let sharedKeyCredential = null;
 let blobServiceClient = null;
 
@@ -120,7 +137,16 @@ router.get("/:id/segment/:filename", verifyToken, async (req, res) => {
       stack: err.stack,
       videoId,
       filename,
+      hasAzureCredentials,
+      blobName: `videos/social/${filename}`,
     });
+    
+    // Set CORS headers even for error responses
+    res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    
     res.status(500).json({
       msg: "Segment access failed",
       error: err.message,
@@ -184,13 +210,35 @@ router.get("/:id/key", verifyToken, async (req, res) => {
       message: err.message,
       stack: err.stack,
       videoId,
+      hasAzureCredentials,
+      blobName: "videos/social/enc.key",
     });
+    
+    // Set CORS headers even for error responses
+    res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    
     res.status(500).json({
       msg: "Key access failed",
       error: err.message,
       details: "Check server logs for more information",
     });
   }
+});
+
+// Handle preflight requests for main playlist
+router.options("/:id", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, Cookie"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Max-Age", "86400");
+  res.status(200).end();
 });
 
 router.get("/:id", verifyToken, async (req, res) => {
@@ -244,13 +292,13 @@ https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.m
     // Replace AES key URL with absolute backend proxy URL
     m3u8Content = m3u8Content.replace(
       /URI=".*enc.key"/,
-      `URI="${baseUrl}/api/stream/${videoId}/key"`
+      `URI="${baseUrl}/api/stream/social/${videoId}/key"`
     );
 
     // Replace all .ts segment URLs with absolute backend proxy URLs
     m3u8Content = m3u8Content.replace(
       /output(\d+).ts/g,
-      (match) => `${baseUrl}/api/stream/${videoId}/segment/${match}`
+      (match) => `${baseUrl}/api/stream/social/${videoId}/segment/${match}`
     );
 
     // Set appropriate headers for HLS streaming
@@ -258,11 +306,33 @@ https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.m
     res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     res.setHeader("Pragma", "no-cache");
     res.setHeader("Expires", "0");
+    res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
 
     res.send(m3u8Content);
   } catch (err) {
     console.error("Streaming error:", err);
-    res.status(500).json({ msg: "Streaming Failed" });
+    console.error("Error details:", {
+      message: err.message,
+      stack: err.stack,
+      videoId,
+      hasAzureCredentials,
+      baseUrl: `${req.protocol}://${req.get("host")}`,
+    });
+    
+    // Set CORS headers even for error responses
+    res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    
+    res.status(500).json({ 
+      msg: "Streaming Failed",
+      error: err.message,
+      details: "Check server logs for more information"
+    });
   }
 });
 
