@@ -18,26 +18,37 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// -------------------- RATE LIMITER --------------------
+// -------------------- RATE LIMITERS --------------------
+
+// Global limiter (light) → allows normal streaming traffic
 const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // each IP can make 100 requests per 15 min
-  message: "Too many requests from this IP, please try again later.",
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 300, // 300 requests per minute per IP (enough for .ts chunks)
+  message: { error: "Too many requests, slow down." },
   standardHeaders: true,
   legacyHeaders: false,
 });
-
-// apply to all requests
 app.use(globalLimiter);
 
-// Optional: stricter limiter just for stream routes
-const streamLimiter = rateLimit({
-  windowMs: 60 * 1000, // 1 minute
-  max: 10, // max 10 requests/minute per IP
-  message: "Stream requests are too frequent, slow down!",
+// Strict limiter for auth endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // only 10 attempts per 15 min
+  message: { error: "Too many authentication attempts, try again later." },
 });
-app.use("/api/stream", streamLimiter);
-// ------------------------------------------------------
+app.use("/api/auth", authLimiter);
+app.use("/api/refresh", authLimiter);
+
+// Super strict for SAS key / sensitive stream endpoints
+const sasLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 2, // only 2 key requests per minute
+  message: { error: "Too many key requests." },
+});
+// apply ONLY if you have a route like /api/stream/key
+app.use("/api/stream/key", sasLimiter);
+
+// -------------------------------------------------------
 
 const allowedOrigins = [
   "http://127.0.0.1:5500",
@@ -78,6 +89,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(frontendDir, "index.html"));
 });
 
+// Mount routes
 app.use("/api/auth", authRoutes);
 app.use("/api/refresh", refreshRoutes);
 app.use("/api/stream", streamRoutes);
