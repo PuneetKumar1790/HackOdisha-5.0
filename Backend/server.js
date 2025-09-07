@@ -32,31 +32,31 @@ const allowedOrigins = [
   /^https:\/\/hack-odisha-5-0.*\.vercel\.app$/,
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (
-        !origin ||
-        allowedOrigins.some(
-          (o) =>
-            (typeof o === "string" && o === origin) ||
-            (o instanceof RegExp && o.test(origin))
-        )
-      ) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    exposedHeaders: ["set-cookie"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  })
-);
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (
+      !origin ||
+      allowedOrigins.some(
+        (o) =>
+          (typeof o === "string" && o === origin) ||
+          (o instanceof RegExp && o.test(origin))
+      )
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  exposedHeaders: ["set-cookie"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+};
 
-// Explicitly handle OPTIONS (preflight)
-app.options("*", cors());
+app.use(cors(corsOptions));
+
+// Explicitly handle OPTIONS (preflight) with whitelist
+app.options("*", cors(corsOptions));
 
 // ----------------------------------------------------
 // Body + cookies
