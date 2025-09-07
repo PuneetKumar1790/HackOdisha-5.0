@@ -4,11 +4,12 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
+import cookieParser from "cookie-parser";
+import rateLimit from "express-rate-limit"; // <--- added
 
 import authRoutes from "./routes/auth.js";
 import streamRoutes from "./routes/stream.js";
 import refreshRoutes from "./routes/refresh.js";
-import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -16,6 +17,27 @@ const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// -------------------- RATE LIMITER --------------------
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // each IP can make 100 requests per 15 min
+  message: "Too many requests from this IP, please try again later.",
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// apply to all requests
+app.use(globalLimiter);
+
+// Optional: stricter limiter just for stream routes
+const streamLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 10, // max 10 requests/minute per IP
+  message: "Stream requests are too frequent, slow down!",
+});
+app.use("/api/stream", streamLimiter);
+// ------------------------------------------------------
 
 const allowedOrigins = [
   "http://127.0.0.1:5500",
@@ -47,10 +69,8 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// Trust proxy for proper HTTPS detection in production
-app.set('trust proxy', 1);
+app.set("trust proxy", 1);
 
-// Serve Frontend statically for same-origin cookies in dev/prod
 const frontendDir = path.resolve(__dirname, "../Frontend");
 app.use(express.static(frontendDir));
 
@@ -58,12 +78,10 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(frontendDir, "index.html"));
 });
 
-//Mounting route handlers
-app.use("/api/auth", authRoutes); //Signup,login,Me
+app.use("/api/auth", authRoutes);
 app.use("/api/refresh", refreshRoutes);
 app.use("/api/stream", streamRoutes);
 
-// MongoDB connection
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
