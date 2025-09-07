@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
-import rateLimit from "express-rate-limit"; // <--- added
+import rateLimit from "express-rate-limit";
 
 import authRoutes from "./routes/auth.js";
 import streamRoutes from "./routes/stream.js";
@@ -18,38 +18,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// -------------------- RATE LIMITERS --------------------
-
-// Global limiter (light) → allows normal streaming traffic
-const globalLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 300, // 300 requests per minute per IP (enough for .ts chunks)
-  message: { error: "Too many requests, slow down." },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-app.use(globalLimiter);
-
-// Strict limiter for auth endpoints
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // only 10 attempts per 15 min
-  message: { error: "Too many authentication attempts, try again later." },
-});
-app.use("/api/auth", authLimiter);
-app.use("/api/refresh", authLimiter);
-
-// Super strict for SAS key / sensitive stream endpoints
-const sasLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 2, // only 2 key requests per minute
-  message: { error: "Too many key requests." },
-});
-// apply ONLY if you have a route like /api/stream/key
-app.use("/api/stream/key", sasLimiter);
-
-// -------------------------------------------------------
-
+// -------------------- CORS FIRST --------------------
 const allowedOrigins = [
   "http://127.0.0.1:5500",
   "http://localhost:5500",
@@ -59,12 +28,21 @@ const allowedOrigins = [
   "http://localhost:5000",
   "https://hack-odisha-5-0.vercel.app",
   "https://hackodisha-5-0.onrender.com",
+  // optional: allow Vercel preview deploys
+  /^https:\/\/hack-odisha-5-0.*\.vercel\.app$/,
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (
+        !origin ||
+        allowedOrigins.some(
+          (o) =>
+            (typeof o === "string" && o === origin) ||
+            (o instanceof RegExp && o.test(origin))
+        )
+      ) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
@@ -77,8 +55,44 @@ app.use(
   })
 );
 
+// Explicitly handle OPTIONS (preflight)
+app.options("*", cors());
+
+// ----------------------------------------------------
+// Body + cookies
 app.use(express.json());
 app.use(cookieParser());
+
+// -------------------- RATE LIMITERS --------------------
+
+// Global limiter (light) → allows streaming chunks
+const globalLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 300, // 300 requests/min per IP
+  message: { error: "Too many requests, slow down." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use(globalLimiter);
+
+// Strict limiter for auth endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { error: "Too many authentication attempts, try again later." },
+});
+app.use("/api/auth", authLimiter);
+app.use("/api/refresh", authLimiter);
+
+// Super strict for SAS key / sensitive stream endpoints
+const sasLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 2,
+  message: { error: "Too many key requests." },
+});
+app.use("/api/stream/key", sasLimiter);
+
+// -------------------------------------------------------
 
 app.set("trust proxy", 1);
 
@@ -94,6 +108,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/refresh", refreshRoutes);
 app.use("/api/stream", streamRoutes);
 
+// DB connection
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
